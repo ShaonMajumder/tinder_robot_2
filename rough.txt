@@ -1,0 +1,46 @@
+1. Login to tinder
+	1A. Detect Popup of Facebook login
+
+		1. * user will give email -
+		<input type="text" class="inputtext _55r1 inputtext inputtext" name="email" id="email" tabindex="0" value="" autofocus="1" autocomplete="username">
+		//input[@type="text" and @name="email" and @id="email"]
+		
+		* user will password - 
+		<input type="password" class="inputtext _55r1 inputtext inputtext" name="pass" id="pass" tabindex="0" autocomplete="current-password">
+		//input[@type="password" and @name="pass" and @id="pass"]
+		
+		* user will click Log in -
+		<input value="Log In" name="login" type="submit" tabindex="0" id="u_0_0">
+
+		-- confusion --
+
+		2. * OTP password will go to mobile, check and give otp
+		OTP field - <input type="text" class="inputtext" id="approvals_code" name="approvals_code" tabindex="1" autocomplete="off" placeholder="Login code" aria-label="Login code">
+		
+		* click continue - <button value="Continue" class="_42ft _4jy0 _2kak _4jy4 _4jy1 selected _51sy" id="checkpointSubmitButton" name="submit[Continue]" type="submit">Continue</button>
+
+		3. * Save Browser Select Radio button - <div class="_2pie"><div class="uiInputLabel clearfix uiInputLabelLegacy _2pim"><input type="radio" name="name_action_selected" value="save_device" checked="1" class="uiInputLabelInput uiInputLabelRadio" id="u_0_2"><label for="u_0_2" class="uiInputLabelLabel"><span class="_2iem">Save Browser</span></label></div><div class="uiInputLabel clearfix uiInputLabelLegacy"><input type="radio" name="name_action_selected" value="dont_save" class="uiInputLabelInput uiInputLabelRadio" id="u_0_3"><label for="u_0_3" class="uiInputLabelLabel"><span class="_2iem">Don't Save</span></label></div></div>
+		
+		* click continue - <button value="Continue" class="_42ft _4jy0 _2kak _4jy4 _4jy1 selected _51sy" id="checkpointSubmitButton" name="submit[Continue]" type="submit">Continue</button>
+
+
+	1B. Detect Popup of Facebook login has gone
+
+	2. Detect if Location permission popup - Tinder uses your location to find people around you. - Click Allow
+		* Detect the text - Tinder uses your location to find people around you.
+	 	- <div data-testid="onboarding__subTitle" id="onboarding-description" class="C($c-base)">Tinder uses your location to find people around you.</div>
+
+	 	* If detected press allow -
+	 	
+	 	<button type="button" class="button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) 
+	 	Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style W(225px) W(a)" draggable="false" aria-label="Allow" data-testid="allow"><span class="Pos(r) Z(1) Fz($xs)">Allow</span></button>
+
+	3. Detect if notification permission pop-uped
+		* Detect text - Get notifications about new matches or messages.
+		- <div id="onboarding-description" class="C($c-base)">Get notifications about new matches or messages.</div>
+
+		* Click on Not intersted button
+		- <button type="button" class="button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Fw($semibold) focus-button-style W(a) C($c-dark-gray)" draggable="false" aria-label="Not interested" data-testid="decline"><span class="Pos(r) Z(1) Fz($xs) C($c-dark-gray)">Not interested</span></button>
+
+
+ url -https://tinder.com/app/recs
