@@ -28,7 +28,7 @@ def try_creating_folders():
 
 try_creating_folders()
 
-# start
+
 chrome_driver_path = "resources/drivers/chromedriver.exe"
 browser = webdriver.Chrome(chrome_driver_path)
 
@@ -172,3 +172,8 @@ object and image detection, make decision:
 		try liking
 		else disliking
 """
+
+#driver.close(), closes the browser window
+#driver.quit, closes the driver
+browser.close()
+browser.quit()

@@ -1,0 +1,80 @@
+1. # # mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'candidate_image_webp_url' at row 1
+# change data type to text large 'candidate_image_webp_url'
+2. Clear all the junk files webp and images
+3.DevTools listening on ws://127.0.0.1:49996/devtools/browser/7422de9e-ce1c-4d1e-b9ea-bfdead97d1af
+Configurations found !
+Clicked login_button
+in facebook login popup
+Waiting for authentication...
+Waiting at checkpoint for 2 factor authentication or anything else.
+Traceback (most recent call last):
+  File "main.py", line 104, in <module>
+    facebook_login_popup(browser,email,password)
+  File "D:\D\work\Automation\tinder_robot\tinder_utility.py", line 587, in facebook_login_popup
+    current_url = driver.current_url
+  File "C:\Python38-32\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 669, in current_url
+    return self.execute(Command.GET_CURRENT_URL)['value']
+  File "C:\Python38-32\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python38-32\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
+  (Session info: chrome=80.0.3987.87)
+  (Driver info: chromedriver=2.44.609538 (b655c5a60b0b544917107a59d4153d4bf78e1b90),platform=Windows NT 10.0.18362 x86_64)
+
+5. add tb.exit()
+>>> browser.quit()
+>>> exit()
+
+6. Max try is over. don't terminate the browser window, @sleep
+
+7. no internet error
+found 9 profile images
+Traceback (most recent call last):
+  File "C:\Python38-32\lib\urllib\request.py", line 1319, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Python38-32\lib\http\client.py", line 1230, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Python38-32\lib\http\client.py", line 1276, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Python38-32\lib\http\client.py", line 1225, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Python38-32\lib\http\client.py", line 1004, in _send_output
+    self.send(msg)
+  File "C:\Python38-32\lib\http\client.py", line 944, in send
+    self.connect()
+  File "C:\Python38-32\lib\http\client.py", line 1392, in connect
+    super().connect()
+  File "C:\Python38-32\lib\http\client.py", line 915, in connect
+    self.sock = self._create_connection(
+  File "C:\Python38-32\lib\socket.py", line 787, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "C:\Python38-32\lib\socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "D:\D\work\Automation\tinder_robot\tinder_utility.py", line 516, in parse_detect_swipe
+    downloaded_profile_images = self.download_profile_images()
+  File "D:\D\work\Automation\tinder_robot\tinder_utility.py", line 342, in download_profile_images
+    wget.download(image_webp_url,image_webp_filename)
+  File "C:\Python38-32\lib\site-packages\wget.py", line 526, in download
+    (tmpfile, headers) = ulib.urlretrieve(binurl, tmpfile, callback)
+  File "C:\Python38-32\lib\urllib\request.py", line 247, in urlretrieve
+    with contextlib.closing(urlopen(url, data)) as fp:
+  File "C:\Python38-32\lib\urllib\request.py", line 222, in urlopen
+    return opener.open(url, data, timeout)
+  File "C:\Python38-32\lib\urllib\request.py", line 525, in open
+    response = self._open(req, data)
+  File "C:\Python38-32\lib\urllib\request.py", line 542, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+  File "C:\Python38-32\lib\urllib\request.py", line 502, in _call_chain
+    result = func(*args)
+  File "C:\Python38-32\lib\urllib\request.py", line 1362, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+  File "C:\Python38-32\lib\urllib\request.py", line 1322, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>

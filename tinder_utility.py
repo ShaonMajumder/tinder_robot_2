@@ -18,16 +18,23 @@ import uuid
 import shaonutil
 import sys
 
+
+folders = {
+	'private_folder' : 'private/',
+    'images_folder' : 'private/data/',
+    'face_found_image_path' : "private/data/faces/",
+    'face_not_found_image_path' : "private/data/not_faces/"
+}
+
 # mysql-connector-python
-# # mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'candidate_image_webp_url' at row 1
-# change data type to text large 'candidate_image_webp_url'
 column_info = {
+	'candidate_sid':'VARCHAR(255)',
 	'candidate_name':'VARCHAR(255)',
 	'candidate_age':'VARCHAR(255)',
 	'candidate_distance':'VARCHAR(255)',
 	'candidate_living_place':'VARCHAR(255)',
 	'candidate_university_or_instituition':'VARCHAR(255)',
-	'candidate_image_webp_url':'VARCHAR(1000)',
+	'candidate_image_webp_url':'TEXT(1000)',
 	'candidate_unique_image_name':'VARCHAR(255)',
 	'candidate_detected_faces':'VARCHAR(255)',
 	'candidate_detection_alogorithm_name':'VARCHAR(255)',
@@ -126,6 +133,7 @@ class tinderbot:
 		databases = cursor.fetchall()
 		databases = [x[0] for x in databases]
 		if dbname not in databases:
+			print("Creating database "+dbname+" ...")
 			cursor.execute("CREATE DATABASE "+dbname)
 
 		db = mysql.connect(
@@ -139,7 +147,7 @@ class tinderbot:
 		cursor.execute('SHOW TABLES')
 		tables = cursor.fetchall()
 		if tbname not in [ x[0] for x in tables ]:
-			# create table
+			print("Creating table "+tbname+" ...")
 			cursor.execute("CREATE TABLE "+self.dbconfig['table']+" (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"+''.join([' '+info+' '+column_info[info]+',' for info in column_info])[:-1]+")")
 	
 	def insert_data(self,value):
@@ -225,6 +233,7 @@ class tinderbot:
 
 		self.temp_image = 'my_screenshot.jpg'
 		self.unique_profile_image_file_name = ''
+		self.unique_sid = ''
 
 	
 	def parse_profile_info(self):
@@ -281,8 +290,10 @@ class tinderbot:
 
 		university_or_instituition = "'"+str(university_or_instituition)+"'"
 
-		self.profile_info = Name, Age, distance, living_place, university_or_instituition, image_webp_urls
-		return Name, Age, distance, living_place, university_or_instituition, image_webp_urls
+		Sid = self.get_unique_profile_sid()
+
+		self.profile_info = Sid, Name, Age, distance, living_place, university_or_instituition, image_webp_urls
+		return Sid, Name, Age, distance, living_place, university_or_instituition, image_webp_urls
 
 	def get_background_images_urls(self):
 		browser = self.driver
@@ -321,7 +332,7 @@ class tinderbot:
 
 	def download_profile_images(self):
 		#and convert to jpg
-		image_webp_urls = self.profile_info[5]
+		image_webp_urls = self.profile_info[6]
 		print("found "+str(len(image_webp_urls))+" profile images")
 		# downloading
 		image_webp_filenames = []
@@ -346,7 +357,7 @@ class tinderbot:
 		return converted_jpgs
 
 	def download_profile_image(self):
-		image_webp_url = self.profile_info[5]
+		image_webp_url = self.profile_info[6]
 		ext = image_webp_url.split('.')[-1]
 		image_webp_filename = self.temp_image.split('.',1)[0] + "." + ext
 		wget.download(image_webp_url,image_webp_filename)
@@ -356,6 +367,41 @@ class tinderbot:
 			im = Image.open(image_webp_filename).convert("RGB")
 			im.save(self.temp_image,"jpeg")
 			os.remove(image_webp_filename)
+
+	def get_unique_profile_sid(self):
+		db = mysql.connect(
+			host = self.dbconfig['host'],
+			user = self.dbconfig['user'],
+			passwd = self.dbconfig['password'],
+			database = self.dbconfig['database']
+		)
+
+		cursor = db.cursor()
+
+		unique_sid = generateCryptographicallySecureRandomString(8)
+
+		while True:
+			print("Generating unique_sid for profile...")
+			query = "SELECT * FROM "+self.dbconfig['table']+" WHERE `candidate_sid` = '"+unique_sid+"'"
+
+			## getting records from the table
+			cursor.execute(query)
+
+			## fetching all records from the 'cursor' object
+			records = cursor.fetchall()
+
+			## Showing the data
+			for record in records:
+			    print(record)
+
+
+			if(len(records)>1):
+				unique_sid = generateCryptographicallySecureRandomString(8)
+			else:
+				break
+		self.unique_sid = unique_sid
+		return unique_sid
+
 
 	def get_local_unique_profile_image_file_name(self):
 		
@@ -618,4 +664,3 @@ def wait_to_find(xpath_):
 			return object_
 		except:
 			time.sleep(1)
-

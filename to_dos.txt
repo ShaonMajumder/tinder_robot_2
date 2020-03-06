@@ -1,0 +1,6 @@
+1. check if it can successfully update_database
+2. swiping 
+3. gender detection
+4. error handling
+5. check in fb
+6. randomly show candidate
