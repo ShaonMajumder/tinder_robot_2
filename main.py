@@ -13,6 +13,7 @@ import shaonutil
 
 # usable to alert - browser.switch_to_alert()
 folders = {
+	'private_folder' : 'private/',
     'images_folder' : 'private/data/',
     'face_found_image_path' : "private/data/faces/",
     'face_not_found_image_path' : "private/data/not_faces/"
@@ -23,6 +24,24 @@ def try_creating_folders():
 		folder = folders[folder]
 		if not os.path.exists(folder):
 			os.mkdir(folder)
+			print("Creating folder "+folder+" ...")
+
+try_creating_folders()
+
+# start
+chrome_driver_path = "resources/drivers/chromedriver.exe"
+browser = webdriver.Chrome(chrome_driver_path)
+
+tb = tinderbot(browser)
+
+
+
+if os.path.isfile('private/config.ini'):
+	print("Configurations found !")	
+else:
+	print("Creating configurations ...")
+	tb.create_configuration()
+
 
 config = shaonutil.file.read_configuration_ini('private/config.ini')
 email = config['fb_authentication']['email']
@@ -34,30 +53,15 @@ dbpasswd = config['db_authentication']['password']
 dbname = config['db_authentication']['database']
 tbname = config['db_authentication']['table']
 
-tb = tinderbot(browser,
-	{
-		'host' : dbhost,
-		'user' : dbuser,
-		'password' : dbpasswd,
-		'database' : dbname,
-		'table' : tbname
-	}
-)
-            
-# start
-chrome_driver_path = "resources/drivers/chromedriver.exe"
-browser = webdriver.Chrome(chrome_driver_path)
+tb.set_db_config({
+	'host' : dbhost,
+	'user' : dbuser,
+	'password' : dbpasswd,
+	'database' : dbname,
+	'table' : tbname
+})
 
-
-initialize_db()
-if os.path.isfile('private/config.ini'):
-	pass
-else:
-	os.makedirs('private')
-	tb.create_configuration()
-try_creating_folders()
-
-
+tb.initialize_db()
 
 # change and make login smother , faster and ensure 100% work time
 

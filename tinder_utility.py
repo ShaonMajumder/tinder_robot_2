@@ -19,6 +19,8 @@ import shaonutil
 import sys
 
 # mysql-connector-python
+# # mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'candidate_image_webp_url' at row 1
+# change data type to text large 'candidate_image_webp_url'
 column_info = {
 	'candidate_name':'VARCHAR(255)',
 	'candidate_age':'VARCHAR(255)',
@@ -31,6 +33,7 @@ column_info = {
 	'candidate_detection_alogorithm_name':'VARCHAR(255)',
 	'candidate_detected_confidences':'VARCHAR(255)'
 }
+
 
 
 def append_tupple(values,next_value):
@@ -51,8 +54,8 @@ def sleep(timeout, retry=3):
 					print(f'Sleeping for {timeout} seconds')
 					time.sleep(timeout)
 					retries += 1
-			if retries == retry:
-				print("Max retry is over.")
+					if retries == retry:
+						raise MaxTryOver("Max retry is over.")
 		return wrapper
 	return the_real_decorator
 
@@ -62,6 +65,21 @@ def convert_to_jpg(image_filename):
 	im.save(jpeg_filename,"jpeg")
 	os.remove(image_filename)
 	return jpeg_filename
+
+class MaxTryOver(Exception):
+	"""docstring for ClassName"""
+	def __init__(self, *args):
+		if args:
+			self.message = args[0]
+		else:
+			self.message = None
+
+	def __str__(self):
+		print("calling string")
+		if self.message:
+			return 'Error >> {0} '.format(self.message)
+		else:
+			return 'MaxTryOverError has been raised.'
 
 class ButtonNotFound(Exception):
 	"""docstring for ClassName"""
@@ -80,10 +98,9 @@ class ButtonNotFound(Exception):
 
 	
 class tinderbot:
-	def __init__(self,driver,dbconfig):
+	def __init__(self,driver):
 		self.driver = driver
 		self.value_init()
-		self.dbconfig = dbconfig
 
 	def __repr__(self):
 		return "TinderBot(browser) at "+self.driver.current_url
@@ -91,7 +108,12 @@ class tinderbot:
 	def __str__(self):
 		return self.driver.current_url
 
+	def set_db_config(self,dbconfig):
+		self.dbconfig = dbconfig
+		
 	def initialize_db(self):
+		dbname = self.dbconfig['database']
+		tbname = self.dbconfig['table']
 
 		db = mysql.connect(
 			host = self.dbconfig['host'],
@@ -114,12 +136,15 @@ class tinderbot:
 		)
 
 		cursor = db.cursor()
+		cursor.execute('SHOW TABLES')
 		tables = cursor.fetchall()
 		if tbname not in [ x[0] for x in tables ]:
 			# create table
 			cursor.execute("CREATE TABLE "+self.dbconfig['table']+" (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"+''.join([' '+info+' '+column_info[info]+',' for info in column_info])[:-1]+")")
 	
 	def insert_data(self,value):
+		dbname = self.dbconfig['database']
+		tbname = self.dbconfig['table']
 		# candidate_name, candidate_age, candidate_distance, candidate_living_place, candidate_university_or_instituition, candidate_image_webp_url, candidate_unique_image_name
 		#cursor.execute("DESC "+tbname)
 		query = "INSERT INTO "+tbname+ ' (' + ''.join([key+', ' for key in column_info])[:-2] + ') VALUES ('+ ''.join(['%s, ' for key in column_info])[:-2]  +')'
@@ -167,6 +192,7 @@ class tinderbot:
 		    print(record)
 
 	def drop_database(self):
+		dbname = self.dbconfig['database']
 		db = mysql.connect(
 			host = self.dbconfig['host'],
 			user = self.dbconfig['user'],
@@ -183,7 +209,7 @@ class tinderbot:
 		print('\nDatabase configurations -')
 		dbhost = input('Give your db host : ')
 		dbuser = input('Give your db user : ')
-		dbpassword = input('Give your db host : ')
+		dbpassword = input('Give your db password : ')
 		dbname = input('Give your db name : ')
 		dbtable = input('Give your db table : ')
 
@@ -434,7 +460,7 @@ class tinderbot:
 
 		return unique_images
 		
-	def parse_detect_swipe(browser):
+	def parse_detect_swipe(self):
 		browser = self.driver
 		#Name, Age, distance, living_place, university_or_instituition, image_webp_urls = tb.parse_profile_info()
 		core_values = self.parse_profile_info()
