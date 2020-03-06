@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from PIL import Image
 import mysql.connector as mysql
 from cvmodels import *
+from tkinter import ttk,Tk,Label,Entry
+import tkinter as tk
 
 import time
 import os
@@ -39,7 +41,10 @@ column_info = {
 	'candidate_unique_image_name':'VARCHAR(255)',
 	'candidate_detected_faces':'VARCHAR(255)',
 	'candidate_detection_alogorithm_name':'VARCHAR(255)',
-	'candidate_detected_confidences':'VARCHAR(255)'
+	'candidate_detected_confidences':'VARCHAR(255)',
+	'human_observation_faces_count':'VARCHAR(255)',
+	'human_observation_gender_array':'VARCHAR(255)',
+	'human_observation_nationality':'VARCHAR(255)'
 }
 
 
@@ -109,6 +114,10 @@ class tinderbot:
 	def __init__(self,driver):
 		self.driver = driver
 		self.value_init()
+	
+	def __del__(self):
+		self.driver.close()
+		self.driver.quit()
 
 	def __repr__(self):
 		return "TinderBot(browser) at "+self.driver.current_url
@@ -188,7 +197,28 @@ class tinderbot:
 		)
 		cursor = db.cursor()
 
-		query = "SELECT * FROM "+self.dbconfig['database']
+		query = "SELECT * FROM "+self.dbconfig['table']
+
+		## getting records from the table
+		cursor.execute(query)
+
+		## fetching all records from the 'cursor' object
+		records = cursor.fetchall()
+
+		## Showing the data
+		for record in records:
+		    print(record)
+
+	def show_columns(self):
+		db = mysql.connect(
+			host = self.dbconfig['host'],
+			user = self.dbconfig['user'],
+			passwd = self.dbconfig['password'],
+			database = self.dbconfig['database']
+		)
+		cursor = db.cursor()
+
+		query = "SHOW COLUMNS FROM "+self.dbconfig['table']
 
 		## getting records from the table
 		cursor.execute(query)
@@ -210,21 +240,75 @@ class tinderbot:
 		cursor = db.cursor()
 		cursor.execute("DROP DATABASE "+dbname)
 
-	def create_configuration(self):
-		print('Getting your configurations to save it.\n')
-		print('Facebook configurations -')
-		fbemail = input('Give your fb email : ')
-		fbpassword = input('Give your fb password : ')
-		print('\nDatabase configurations -')
-		dbhost = input('Give your db host : ')
-		dbuser = input('Give your db user : ')
-		dbpassword = input('Give your db password : ')
-		dbname = input('Give your db name : ')
-		dbtable = input('Give your db table : ')
+	def create_configuration(self,option='cli'):
+		if option == 'cli':
+			print('Getting your configurations to save it.\n')
+			print('Facebook configurations -')
+			fbemail = input('Give your fb email : ')
+			fbpassword = input('Give your fb password : ')
+			print('\nDatabase configurations -')
+			dbhost = input('Give your db host : ')
+			dbuser = input('Give your db user : ')
+			dbpassword = input('Give your db password : ')
+			dbname = input('Give your db name : ')
+			dbtable = input('Give your db table : ')
 
-		f = open("private/config.ini", "w+")
-		f.writelines(["; config file\n", "[fb_authentication]\n", "email = "+fbemail+"\n", "password = "+fbpassword+"\n", "[db_authentication]\n", "host = "+dbhost+"\n", "user = "+dbuser+"\n", "password = "+dbpassword+"\n", "database = "+dbname+"\n", "table = "+dbtable+"\n"])
-		f.close()
+			f = open("private/config.ini", "w+")
+			f.writelines(["; config file\n", "[fb_authentication]\n", "email = "+fbemail+"\n", "password = "+fbpassword+"\n", "[db_authentication]\n", "host = "+dbhost+"\n", "user = "+dbuser+"\n", "password = "+dbpassword+"\n", "database = "+dbname+"\n", "table = "+dbtable+"\n"])
+			f.close()
+		elif option == 'gui':
+			window = Tk()
+			window.title("Welcome to TutorialsPoint")
+			window.geometry('400x400')
+			window.configure(background = "grey");
+
+			# Label fb_authentication
+			FB_LABEL = Label(window ,text = "Facebook Authentication").grid(row = 0,column = 0,columnspan=2)
+			a = Label(window ,text = "Email").grid(row = 1,column = 0)
+			b = Label(window ,text = "Password").grid(row = 2,column = 0)
+			DB_LABEL = Label(window ,text = "Database Authentication").grid(row = 3,column = 0,columnspan=2)
+			c = Label(window ,text = "Host").grid(row = 4,column = 0)
+			d = Label(window ,text = "User").grid(row = 5,column = 0)
+			d = Label(window ,text = "Password").grid(row = 6,column = 0)
+			d = Label(window ,text = "Database").grid(row = 7,column = 0)
+			d = Label(window ,text = "Table").grid(row = 8,column = 0)
+
+			fbemail_ = tk.StringVar(window)
+			fbpassword_ = tk.StringVar(window)
+			dbhost_ = tk.StringVar(window)
+			dbuser_ = tk.StringVar(window)
+			dbpassword_ = tk.StringVar(window)
+			dbname_ = tk.StringVar(window)
+			dbtable_ = tk.StringVar(window)
+
+			Entry(window,textvariable=fbemail_).grid(row = 1,column = 1)
+			Entry(window,show="*",textvariable=fbpassword_).grid(row = 2,column = 1)
+			Entry(window,textvariable=dbhost_).grid(row = 4,column = 1)
+			Entry(window,textvariable=dbuser_).grid(row = 5,column = 1)
+			Entry(window,show="*",textvariable=dbpassword_).grid(row = 6,column = 1)
+			Entry(window,textvariable=dbname_).grid(row = 7,column = 1)
+			Entry(window,textvariable=dbtable_).grid(row = 8,column = 1)
+
+			def clicked():
+				fbemail = fbemail_.get()
+				fbpassword = fbpassword_.get()
+				dbhost = dbhost_.get()
+				dbuser = dbuser_.get()
+				dbpassword = dbpassword_.get()
+				dbname = dbname_.get()
+				dbtable = dbtable_.get()
+
+				f = open("private/config.ini", "w+")
+				f.writelines(["; config file\n", "[fb_authentication]\n", "email = "+fbemail+"\n", "password = "+fbpassword+"\n", "[db_authentication]\n", "host = "+dbhost+"\n", "user = "+dbuser+"\n", "password = "+dbpassword+"\n", "database = "+dbname+"\n", "table = "+dbtable+"\n"])
+				f.close()
+				window.destroy()
+
+
+
+			btn = ttk.Button(window ,text="Submit",command=clicked).grid(row=9,column=0)
+			window.mainloop()
+
+		
 
 	def value_init(self):
 		self.profile_info = ''

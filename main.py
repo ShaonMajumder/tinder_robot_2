@@ -40,7 +40,7 @@ if os.path.isfile('private/config.ini'):
 	print("Configurations found !")	
 else:
 	print("Creating configurations ...")
-	tb.create_configuration()
+	tb.create_configuration('gui')
 
 
 config = shaonutil.file.read_configuration_ini('private/config.ini')
