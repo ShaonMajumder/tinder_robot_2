@@ -27,6 +27,7 @@ folders = {
 }
 
 # mysql-connector-python
+# mysql_connector_repackaged
 column_info = {
 	'candidate_sid':'VARCHAR(255)',
 	'candidate_name':'VARCHAR(255)',

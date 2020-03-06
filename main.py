@@ -85,8 +85,14 @@ def finding_app_login_by_facebook():
 		pass
 
 	if is_element_exist(browser,"//button/span[text()='Log in with Facebook']",11):
-		facebook_login_button = browser.find_element_by_xpath("//button/span[text()='Log in with Facebook']")
-		facebook_login_button.click()
+		try:
+			facebook_login_button = browser.find_element_by_xpath("//button/span[text()='Log in with Facebook']")
+			facebook_login_button.click()
+		except:
+			browser.find_element_by_xpath('//button[text()="More Options"]').click()
+			facebook_login_button = browser.find_element_by_xpath("//button/span[text()='Log in with Facebook']")
+			facebook_login_button.click()
+			
 		exit_c = False
 	else:
 		raise ButtonNotFound("Facebook login button not found or Site is not reachable")
