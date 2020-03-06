@@ -4,3 +4,11 @@ https://blog.miguelgrinberg.com/post/how-to-make-python-wait
 https://towardsdatascience.com/how-to-define-custom-exception-classes-in-python-bfa346629bca
 https://data-flair.training/blogs/top-python-interview-questions-answer/
 how to keep checking until timeout instead of sleep in python
+
+
+Projects to review
+https://github.com/jocialiang/gender_classifier
+https://github.com/Hameedkunkanoor/FaceEmotionDetection
+https://github.com/saisandeep97/angle_detection/blob/master/Project.ipynb
+https://github.com/search?p=9&q=face+detection+deep+learning&type=Repositories
+https://github.com/justadudewhohacks/opencv4nodejs/blob/master/examples/typed/dnn/loadFacenet.ts
