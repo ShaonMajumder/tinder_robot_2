@@ -4,68 +4,167 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-
+from shutil import copyfile,move
 from bs4 import BeautifulSoup
+from tinder_utility import *
 import time
 import os
 import shaonutil
 
-from tinder_utility import *
+# usable to alert - browser.switch_to_alert()
+folders = {
+    'images_folder' : 'private/data/',
+    'face_found_image_path' : "private/data/faces/",
+    'face_not_found_image_path' : "private/data/not_faces/"
+}
 
-# usable to alert - driver.switch_to_alert()
+def try_creating_folders():
+	for folder in folders:
+		folder = folders[folder]
+		if not os.path.exists(folder):
+			os.mkdir(folder)
 
+config = shaonutil.file.read_configuration_ini('private/config.ini')
+email = config['fb_authentication']['email']
+password = config['fb_authentication']['password']
 
+dbhost = config['db_authentication']['host']
+dbuser = config['db_authentication']['user']
+dbpasswd = config['db_authentication']['password']
+dbname = config['db_authentication']['database']
+tbname = config['db_authentication']['table']
+
+tb = tinderbot(browser,
+	{
+		'host' : dbhost,
+		'user' : dbuser,
+		'password' : dbpasswd,
+		'database' : dbname,
+		'table' : tbname
+	}
+)
+            
 # start
+chrome_driver_path = "resources/drivers/chromedriver.exe"
+browser = webdriver.Chrome(chrome_driver_path)
 
+
+initialize_db()
 if os.path.isfile('private/config.ini'):
 	pass
 else:
-	create_private_folder()
+	os.makedirs('private')
+	tb.create_configuration()
+try_creating_folders()
 
-config = shaonutil.file.read_configuration_ini('private/config.ini')
-email = config['authentication']['email']
-password = config['authentication']['password']
 
-chrome_driver_path = "resources/chromedriver.exe"
-driver = webdriver.Chrome(chrome_driver_path)
-driver.get("https://tinder.com")
-
-# give time popup to show up
-time.sleep(11)
-
-if is_element_exist(driver,"//button/span[text()='Log in']"):
-	login_button = driver.find_element_by_xpath("//button/span[text()='Log in']")
 
 # change and make login smother , faster and ensure 100% work time
-dialog_box = driver.find_element_by_xpath("//div[@role='dialog']")
-close_box = dialog_box.find_element_by_xpath("//button[@aria-label='Close']")
-facebook_login_button = driver.find_element_by_xpath("//button/span[text()='Log in with Facebook']")
 
-try:
-	login_button.click()
-	print("Clicked login_button")
-	facebook_login_button.click()
-except:
-	facebook_login_button.click()
+# give time popup to show up
+exit_c = False
 
-facebook_login_popup(driver,email,password)
+@sleep(3,retry=3)
+def finding_app_login_by_facebook():
+	browser.get("https://tinder.com")
+	if is_element_exist(browser,"//button/span[text()='Log in']",11):
+		login_button = browser.find_element_by_xpath("//button/span[text()='Log in']")
 
-if 'tinder.com' in driver.current_url:
-	print('Returned to '+driver.current_url)
+	try:
+		login_button.click()
+		print("Clicked login_button")
+	except:
+		#login_button is not clickable
+		#is_element_exist(browser,"//div[@role='dialog']",11)
+		#dialog_box = browser.find_element_by_xpath("//div[@role='dialog']")
+		#close_box = dialog_box.find_element_by_xpath("//button[@aria-label='Close']")
+		pass
 
-time.sleep(2)
+	if is_element_exist(browser,"//button/span[text()='Log in with Facebook']",11):
+		facebook_login_button = browser.find_element_by_xpath("//button/span[text()='Log in with Facebook']")
+		facebook_login_button.click()
+		exit_c = False
+	else:
+		raise ButtonNotFound("Facebook login button not found or Site is not reachable")
+		exit_c = True
+		
 
-if 'tinder.com/app/recs' in driver.current_url:
-	print('login_granted')
+#retry 3 times, after 1 time say reloading...,  then browser.quit() quit() to end the program
+finding_app_login_by_facebook()
 
+
+if exit_c:
+	browser.quit()
+	quit()
+	
+facebook_login_popup(browser,email,password)
+
+print('Returned to '+browser.current_url)
+
+#time.sleep(2)
+now = 0
+retry = 30 # for total 10 second max wait
+while now < retry:
+	if 'tinder.com/app' in browser.current_url:
+		print('login_granted')
+		break
+	time.sleep(0.33) # one third of second
+	now += 1
+
+
+# handling permission dialogues
 share_ur_location_xpath = "//div[@id=\"onboarding-description\" and contains(text(),\"Tinder uses your location to find people around you\")]"
-if is_element_exist(driver,share_ur_location_xpath):
-	driver.find_element_by_xpath("//button[@type=\"button\" and @aria-label=\"Allow\"]/span[text()=\"Allow\"]").click()
+if is_element_exist(browser,share_ur_location_xpath,44):
+	browser.find_element_by_xpath("//button[@type=\"button\" and @aria-label=\"Allow\"]/span[text()=\"Allow\"]").click()
 	print("Enabled location permission.")
 
-#time.sleep(4)
+else:
+	print("location not appread yet")
 
 notification_xpath = "//div[@id=\"onboarding-description\" and text()=\"Get notifications about new matches or messages.\"]"
-if is_element_exist(driver,notification_xpath):
-	driver.find_element_by_xpath("//button[@type=\"button\" and @aria-label=\"Not interested\"]/span[text()=\"Not interested\"]").click()
+if is_element_exist(browser,notification_xpath):
+	browser.find_element_by_xpath("//button[@type=\"button\" and @aria-label=\"Not interested\"]/span[text()=\"Not interested\"]").click()
 	print("Cancelled notifications permission.")
+else:
+	print("notifications not appread yet")
+
+#@sleep(3,retry=3)
+def is_tinder_is_ready_for_swipping(browser):
+	print("Checking is tinder is ready for swipping...")
+	try:
+		#click messages
+		browser.find_element_by_xpath('//button[@role="tab" and @id="messages-tab" and @aria-controls="matchListWithMessages" and text()="Messages"]').click()
+		#click matches
+		browser.find_element_by_xpath('//button[@role="tab" and @id="match-tab" and @aria-controls="matchListNoMessages" and text()="Matches"]').click()
+		browser.find_element_by_xpath('//div[contains(@class,"active") and contains(@class,"recCard")]').click()
+		return True
+	except:
+		# not clickable
+		return False
+
+# check if tinder is ready for swipping
+maxtry = 30
+now = 0
+while not is_tinder_is_ready_for_swipping(browser) and now < maxtry:
+	time.sleep(0.33)
+	now += 1
+
+
+
+print("Waiting for finishing swipe animation... 4 sec")
+time.sleep(4)
+
+tb.parse_detect_swipe()
+
+#store_classfying_image(faces,algorithm_name,temp_image_name)
+
+"""
+use unique image name
+object and image detection, make decision:
+	move image to decision folder
+	check if likable or any prompt appread or out of like appeeard
+	if out of like the log and quit
+	else:
+		try liking
+		else disliking
+"""

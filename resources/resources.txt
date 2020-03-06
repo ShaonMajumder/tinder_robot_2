@@ -1,0 +1,6 @@
+https://realpython.com/python-sleep/
+https://realpython.com/primer-on-python-decorators/
+https://blog.miguelgrinberg.com/post/how-to-make-python-wait
+https://towardsdatascience.com/how-to-define-custom-exception-classes-in-python-bfa346629bca
+https://data-flair.training/blogs/top-python-interview-questions-answer/
+how to keep checking until timeout instead of sleep in python

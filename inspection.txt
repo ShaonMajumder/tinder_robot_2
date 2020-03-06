@@ -1,0 +1,171 @@
+//div[@role="region" and contains(@class,"recsCardboard")]
+	//div[@class="recCard Ov(h) Cur(p) W(100%) Bgc($c-placeholder) StretchedBox Bdrs(8px) CenterAlign--ml Toa(n) active"]
+		//div[@class="Bdrs(8px) Bgz(cv) Bgp(c) StretchedBox"]
+
+
+# First copy xpaths
+# then find common wrapper
+
+Name    - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[1]/div/div/span
+Age     - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[1]/div/span
+Ins     - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div/div[1]/div[2]
+distant - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div/div[2]/div[2]
+		  		  
+
+
+		  //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div
+		  <div class="recCard__info Fl(start) NetWidth(100%,50px)">
+		  //div[contains(@class,"recCard__info")]
+
+
+Name    - //div[contains(@class,"recCard__info")]/div[1]/div/div/span
+Age     - //div[contains(@class,"recCard__info")]/div[1]/div/span
+Ins     - //div[contains(@class,"recCard__info")]/div[2]/div/div/div[1]/div[2]
+distant - //div[contains(@class,"recCard__info")]/div[2]/div/div/div[2]/div[2]
+
+
+
+has multiple object in same xpath,
+so finding active parent object of active name object by absolute xpath  (//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div) and checking one lever deeper ..
+
+//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]
+<div class="recCard Ov(h) Cur(p) W(100%) Bgc($c-placeholder) StretchedBox Bdrs(8px) CenterAlign--ml Toa(n) active Prs(1000px) Bfv(h)" draggable="false" aria-hidden="false" style="transform: translate3d(0px, 0px, 0px) rotate(0rad) scale(1);"><div class="Expand D(f) tappable-view"><div class="Animdur($fast) Animtf(eio) tappable_recCard Expand Pos(a)" aria-live="polite" role="region" style="overflow-x: hidden;"><div class="react-swipeable-view-container" style="height: 100%; flex-direction: row; transition: all 0s ease 0s; direction: ltr; display: flex; will-change: transform; transform: translate(0%, 0px);"><div aria-hidden="false" data-swipeable="true" style="width: 100%; flex-shrink: 0; overflow: auto;"><div class="Expand Pos(a) CenterAlign" aria-hidden="false"><div class="Bdrs(8px) Bgz(cv) Bgp(c) StretchedBox" style="background-image: url(&quot;https://images-ssl.gotinder.com/5d044125723141160077c659/640x800_75_06a1d04a-10e2-4fbe-8738-4b55a75b883d.webp&quot;); background-position: 50% 49.3151%; background-size: auto 110.041%;"></div></div></div><div aria-hidden="true" data-swipeable="true" style="width: 100%; flex-shrink: 0; overflow: auto;"><span class="D(n)"></span></div><div aria-hidden="true" data-swipeable="true" style="width: 100%; flex-shrink: 0; overflow: auto;"><span class="D(n)"></span></div></div></div><svg class="D(n) Pos(a) Z(1) T(50%) Mx(10px) Op(0) tappable-view:h_Op(1) Trsdu($fast) D(n)--s" viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true" role="presentation"><path class="Fill(#fff)" d="M13.98 20.717a1.79 1.79 0 0 0 2.685 0 1.79 1.79 0 0 0 0-2.684l-7.158-6.62 7.158-6.8a1.79 1.79 0 0 0 0-2.684 1.79 1.79 0 0 0-2.684 0L5.929 9.98a1.79 1.79 0 0 0 0 2.684l8.052 8.052z"></path></svg><svg class="Pos(a) Z(1) T(50%) End(0) Mx(10px) Op(0) tappable-view:h_Op(1) Trsdu($fast) Rotate(180deg) D(n)--s" viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true" role="presentation"><path class="Fill(#fff)" d="M13.98 20.717a1.79 1.79 0 0 0 2.685 0 1.79 1.79 0 0 0 0-2.684l-7.158-6.62 7.158-6.8a1.79 1.79 0 0 0 0-2.684 1.79 1.79 0 0 0-2.684 0L5.929 9.98a1.79 1.79 0 0 0 0 2.684l8.052 8.052z"></path></svg><div class="CenterAlign D(f) Fld(r) W(100%) Px(8px) Pos(a)"><button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a bullet--active H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc(#fff)::a focus-background-style" data-cy-active="true"><span class="Hidden">1/3</span></button><button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc($c-bg-black)::a Op(.2) focus-background-style" data-cy-active="false"><span class="Hidden">2/3</span></button><button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc($c-bg-black)::a Op(.2) focus-background-style" data-cy-active="false"><span class="Hidden">3/3</span></button></div></div><div class="Pos(a) P(.1em) Fw($semibold) Tt(u) Bdrs(4px) Bdw(4px) Bds(s) Wc($opacity) Op(0) Trsp($opacity) Trsdu($fast) Fz(4rem) Lh(3.5rem) Pe(n) T(10%) End(10%) C($c-nope-red) Bdc($c-nope-red) Rotate(20deg)" style="opacity: 0;">Nope</div><div class="Pos(a) P(.1em) Fw($semibold) Tt(u) Bdrs(4px) Bdw(4px) Bds(s) Wc($opacity) Op(0) Trsp($opacity) Trsdu($fast) Fz(4rem) Lh(3.5rem) Pe(n) T(10%) Start(10%) C($c-like-green) Bdc($c-like-green) Rotate(-20deg)" style="opacity: 0;">Like</div><div class="Pos(a) P(.1em) Fw($semibold) Tt(u) Bdrs(4px) Bdw(4px) Bds(s) Wc($opacity) Op(0) Trsp($opacity) Trsdu($fast) Fz(4rem) Lh(3.5rem) Pe(n) recCard__stamp--superlike B(20%) C($c-superlike-blue) Bdc($c-superlike-blue) Rotate(-20deg)" style="opacity: 0;">Super Like</div><div class="Pos(a) Start(0) B(0) End(0) TranslateZ(0) H(30%) Bgi($light-gradient) Bdrsbend(8px) Bdrsbstart(8px)"></div><div class="Pos(a) D(f) Jc(sb) C(#fff) Ta(start) B(0) W(100%) Wc($transform) P(16px) P(20px)--l"><div class="recCard__info Fl(start) NetWidth(100%,50px)"><div class="Pos(a) Fz($l) B(0) Trsdu($fast) NetWidth(100%,50px) D(f) Ai(c)" style="transform: translateY(-43px);"><div class="D(f) Ai(b) Ov(h) Maw(80%)"><div class="Ov(h) Ws(nw) Ell"><span class="Fxs($flx1) Flw(w) Fz($xl) Fw($bold) Pend(8px)">Mathew</span></div><span class="Whs(nw)">21</span></div></div><div class=""><div><div class="BreakWord Whs(pl) Fz($ms) LineClamp(4,94.5px) Ta(start) Animn($anim-slide-in-left) Animdur($fast)"><span class="">Looking for men</span></div></div></div></div><button class="Pos(a) P(0) End(16px) B(40px) Trsdu($normal) Sq(28px) Bdrs(50%) Cur(p) Ta(c) Fl(end) Scale(1.2):h focus-button-style"><svg class="Expand" viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="false" aria-labelledby="1adfd154bd7b5ac8" role="img"><path fill="#fff" d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path><title id="1adfd154bd7b5ac8">Open Profile</title></svg></button></div><div class="recCard__info Fl(start) NetWidth(100%,50px)"><div class="Pos(a) Fz($l) B(0) Trsdu($fast) NetWidth(100%,50px) D(f) Ai(c)" style="transform: translateY(-74px);"><div class="D(f) Ai(b) Ov(h) Maw(80%)"><div class="Ov(h) Ws(nw) Ell"><span class="Fxs($flx1) Flw(w) Fz($xl) Fw($bold) Pend(8px)">Iftia</span></div><span class="Whs(nw)">20</span></div></div><div class=""><div><div class="C(#fff) Fz($ms) Animn($anim-slide-in-left) Animdur($fast)"><div class="Row"><div class="Mend(4px) D(ib) Va(t)"><svg class="Sq(16px) Va(m)" viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true" role="presentation"><path fill="#fff" stroke="#fff" stroke-width=".5" d="M11.87 5.026L2.186 9.242c-.25.116-.25.589 0 .705l.474.204v2.622a.78.78 0 0 0-.344.657c0 .42.313.767.69.767.378 0 .692-.348.692-.767a.78.78 0 0 0-.345-.657v-2.322l2.097.921a.42.42 0 0 0-.022.144v3.83c0 .45.27.801.626 1.101.358.302.842.572 1.428.804 1.172.46 2.755.776 4.516.776 1.763 0 3.346-.317 4.518-.777.586-.23 1.07-.501 1.428-.803.355-.3.626-.65.626-1.1v-3.83a.456.456 0 0 0-.022-.145l3.264-1.425c.25-.116.25-.59 0-.705L12.13 5.025c-.082-.046-.22-.017-.26 0v.001zm.13.767l8.743 3.804L12 13.392 3.257 9.599l8.742-3.806zm-5.88 5.865l5.75 2.502a.319.319 0 0 0 .26 0l5.75-2.502v3.687c0 .077-.087.262-.358.491-.372.29-.788.52-1.232.68-1.078.426-2.604.743-4.29.743s-3.212-.317-4.29-.742c-.444-.161-.86-.39-1.232-.68-.273-.23-.358-.415-.358-.492v-3.687z"></path></svg></div><div class="Us(t) Va(m) D(ib) My(2px) NetWidth(100%,20px) C(#fff) Ell">North South University</div></div><div class="Row"><div class="Mend(4px) D(ib) Va(t)"><svg class="Sq(16px) Va(m)" viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true" role="presentation"><g fill="#fff" stroke="#fff" stroke-width=".5" fill-rule="evenodd"><path d="M11.436 21.17l-.185-.165a35.36 35.36 0 0 1-3.615-3.801C5.222 14.244 4 11.658 4 9.524 4 5.305 7.267 2 11.436 2c4.168 0 7.437 3.305 7.437 7.524 0 4.903-6.953 11.214-7.237 11.48l-.2.167zm0-18.683c-3.869 0-6.9 3.091-6.9 7.037 0 4.401 5.771 9.927 6.897 10.972 1.12-1.054 6.902-6.694 6.902-10.95.001-3.968-3.03-7.059-6.9-7.059h.001z"></path><path d="M11.445 12.5a2.945 2.945 0 0 1-2.721-1.855 3.04 3.04 0 0 1 .641-3.269 2.905 2.905 0 0 1 3.213-.645 3.003 3.003 0 0 1 1.813 2.776c-.006 1.653-1.322 2.991-2.946 2.993zm0-5.544c-1.378 0-2.496 1.139-2.498 2.542 0 1.404 1.115 2.544 2.495 2.546a2.52 2.52 0 0 0 2.502-2.535 2.527 2.527 0 0 0-2.499-2.545v-.008z"></path></g></svg></div><div class="Us(t) Va(m) D(ib) My(2px) NetWidth(100%,20px) C(#fff) Ell">21 kilometers away</div></div></div></div></div></div></div>
+//div[contains(@class,"active") and contains(@class,"recCard")]
+
+
+
+
+
+Name       - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[1]/div/div/span
+Age        - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[1]/div/span
+
+Job        - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[1]/div[2]
+Ins        - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[2]/div[2]
+location   - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[3]/div[2]
+distant    - //div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[4]/div[2]
+
+image_file -
+
+<div class="Bdrs(8px) Bgz(cv) Bgp(c) StretchedBox" style="background-image: url(&quot;https://images-ssl.gotinder.com/5e59f8b3f90ed50100877a0d/640x800_75_2095f2f7-176c-40ba-83d5-5769c3a21771.webp&quot;); background-position: 50% 49.3151%; background-size: auto 110.041%;"></div>
+		  //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[2]/div[1]/div/div/div/div/div
+
+Name    - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[1]/div/div/span
+Age     - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[1]/div/span
+Ins     - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div/div[1]/div[2]
+distant - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div/div[2]/div[2]
+		  		  
+image	- //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[2]/div[1]/div/div/div/div/div
+		  
+common  - //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]
+			<div class="recsCardboard__cards Expand Animdur($fast) Animtf(eio) Pos(r) CenterAlign Z(1)">
+			//div[contains(@class,"recsCardboard__cards")] of 2
+		  more clear class selector
+		  //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div
+			//div[contains(@class,"recsCardboard__cardsContainer")]
+
+//div[contains(@class,"recsCardboard__cardsContainer")]
+//div[contains(@class,"active") and contains(@class,"recCard")]
+//div[contains(@class,"recCard__info")]
+
+//div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]
+//div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"recCard__info")]
+
+
+root_container - //div[contains(@class,"recsCardboard__cardsContainer")]
+			 //*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div
+
+Name       - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[1]/div/div/span
+Age        - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[1]/div/span
+
+get them as list
+Job        - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[1]/div[2]
+Ins        - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[2]/div[2]
+location   - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[3]/div[2]
+distant    - //div[contains(@class,"recsCardboard__cardsContainer")]//div[contains(@class,"active") and contains(@class,"recCard")]//div[contains(@class,"recCard__info")]/div[2]/div/div/div[4]/div[2]
+
+check for terms
+if kilometers away/kilometer away in list, it is distance
+if 'Lives in', it is location
+rest is university or instituition
+
+image_file - //div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[2]/div[1]/div/div/div/div/div
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+root_container = '//div[contains(@class,"recsCardboard__cardsContainer")]'
+images_container = root_container+'/div[1]/div[3]/div[1]/div[1]/div/div'
+images = browser.find_elements_by_xpath(images_container)
+total_images = len(images)
+#//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div /div[1]/div[3]/div[1]/div[1]/div/div[9]/div/div
+#//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div
+
+ //div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[1]/div/div
+
+images_url = [images_container +'['+str(i)+']/div/div' for i in range(1,total_images+1)]
+for image_xpath in images_url:
+	print(browser.find_element_by_xpath(image_xpath ).get_attribute('style'))
+
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[1]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[2]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[3]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[4]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[5]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[6]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[7]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[8]/div/div
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[9]/div/div
+
+//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div
+//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[2]/button[1]
+//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[2]/button[1]
+
+
+
+<button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc($c-bg-black)::a Op(.2) focus-background-style" data-cy-active="false"><span class="Hidden">1/9</span></button>
+
+<button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc($c-bg-black)::a Op(.2) focus-background-style" data-cy-active="false"><span class="Hidden">2/9</span></button>
+
+....
+//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[2]/button[9]
+<button class="bullet D(ib) Va(m) Cnt($blank)::a D(b)::a bullet--active H(4px)::a W(100%)::a Py(6px) Px(2px) W(100%) Bdrs(100px)::a Bgc(#fff)::a focus-background-style" data-cy-active="true"><span class="Hidden">9/9</span></button>
+
+
+image_navigation_buttons_container = root_container + '/div[1]/div[3]/div[1]/div[2]/button'
+len(browser.find_elements_by_xpath(image_navigation_buttons_container))
+
+
+#make image active
+root_container = '//div[contains(@class,"recsCardboard__cardsContainer")]'
+
+image_navigation_buttons_container = root_container + '/div[1]/div[3]/div[1]/div[2]/button'
+buttons = browser.find_elements_by_xpath(image_navigation_buttons_container)
+
+images_container = root_container+'/div[1]/div[3]/div[1]/div[1]/div/div'
+images = browser.find_elements_by_xpath(images_container)
+
+len(buttons) == len(images)
+
+#total_images = len(buttons)
+
+
+#//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div /div[1]/div[3]/div[1]/div[1]/div/div[9]/div/div
+#//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div
+#//div[contains(@class,"recsCardboard__cardsContainer")]/div[1]/div[3]/div[1]/div[1]/div/div[1]/div/div
+
+for i in range(0,len(buttons)):
+	buttons[i].click()
+
+images_url = [images_container +'['+str(i)+']/div/div' for i in range(1,total_images+1)]
+for image_xpath in images_url:
+	print(browser.find_element_by_xpath(image_xpath ).get_attribute('style'))

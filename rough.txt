@@ -43,4 +43,30 @@
 		- <button type="button" class="button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Fw($semibold) focus-button-style W(a) C($c-dark-gray)" draggable="false" aria-label="Not interested" data-testid="decline"><span class="Pos(r) Z(1) Fz($xs) C($c-dark-gray)">Not interested</span></button>
 
 
- url -https://tinder.com/app/recs
+Logged in url -https://tinder.com/app/
+
+
+Logged in parameter
+tinder.com/app
+get swipping
+message, matches
+My Profile
+
+
+Login -
+https://www.facebook.com/login.php?skip_api_login=1&api_key=464891386855067&kid_directed_site=0&app_id=464891386855067&signed_next=1&next=https://www.facebook.com/v2.8/dialog/oauth?app_id=464891386855067&cbt=1583307109319&channel_url=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df3d71704aea6fd%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff14231d9d2bada4%26relation%3Dopener&client_id=464891386855067&display=popup&domain=tinder.com&e2e=%7B%7D&fallback_redirect_uri=https%3A%2F%2Ftinder.com%2F&locale=en_US&logger_id=f205093ef34d734&origin=1&redirect_uri=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df8cfcbd5a3464c%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff14231d9d2bada4%26relation%3Dopener%26frame%3Df24eea1b034c08&response_type=token%2Csigned_request%2Cgraph_domain&scope=user_birthday%2Cuser_photos%2Cemail%2Cuser_friends%2Cuser_likes&sdk=joey&version=v2.8&ret=login&fbapp_pres=0&cancel_url=https://staticxx.facebook.com/connect/xd_arbiter.php?version=45#cb=f8cfcbd5a3464c&domain=tinder.com&origin=https%3A%2F%2Ftinder.com%2Ff14231d9d2bada4&relation=opener&frame=f24eea1b034c08&error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied&display=popup&locale=en_GB&pl_dbl=0
+
+
+Checkpoint - https://www.facebook.com/checkpoint/?next=https://www.facebook.com/v2.8/dialog/oauth?app_id=464891386855067&cbt=1583307109319&channel_url=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df3d71704aea6fd%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff14231d9d2bada4%26relation%3Dopener&client_id=464891386855067&display=popup&domain=tinder.com&e2e=%7B%7D&fallback_redirect_uri=https%3A%2F%2Ftinder.com%2F&locale=en_US&logger_id=f205093ef34d734&origin=1&redirect_uri=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df8cfcbd5a3464c%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff14231d9d2bada4%26relation%3Dopener%26frame%3Df24eea1b034c08&response_type=token%2Csigned_request%2Cgraph_domain&scope=user_birthday%2Cuser_photos%2Cemail%2Cuser_friends%2Cuser_likes&sdk=joey&version=v2.8&ret=login&fbapp_pres=0
+
+Checkpoint - https://www.facebook.com/checkpoint/?next=https://www.facebook.com/v2.8/dialog/oauth?app_id=464891386855067&cbt=1583311197307&channel_url=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df1c6a5a57480298%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff1437dd71674cec%26relation%3Dopener&client_id=464891386855067&display=popup&domain=tinder.com&e2e=%7B%7D&fallback_redirect_uri=https%3A%2F%2Ftinder.com%2F&locale=en_US&logger_id=f3f1c9b54cf3bdc&origin=1&redirect_uri=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df3ce61dee4a6c68%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff1437dd71674cec%26relation%3Dopener%26frame%3Df34dfb560e91c58&response_type=token%2Csigned_request%2Cgraph_domain&scope=user_birthday%2Cuser_photos%2Cemail%2Cuser_friends%2Cuser_likes&sdk=joey&version=v2.8&ret=login&fbapp_pres=0
+
+Colosing Dialogue  after gaining access -
+https://www.facebook.com/v2.8/dialog/oauth?app_id=464891386855067&cbt=1583311197307&channel_url=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df1c6a5a57480298%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff1437dd71674cec%26relation%3Dopener&client_id=464891386855067&display=popup&domain=tinder.com&e2e=%7B%7D&fallback_redirect_uri=https%3A%2F%2Ftinder.com%2F&locale=en_US&logger_id=f3f1c9b54cf3bdc&origin=1&redirect_uri=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D45%23cb%3Df3ce61dee4a6c68%26domain%3Dtinder.com%26origin%3Dhttps%253A%252F%252Ftinder.com%252Ff1437dd71674cec%26relation%3Dopener%26frame%3Df34dfb560e91c58&response_type=token%2Csigned_request%2Cgraph_domain&scope=user_birthday%2Cuser_photos%2Cemail%2Cuser_friends%2Cuser_likes&sdk=joey&version=v2.8&ret=login&fbapp_pres=0
+
+
+Messages - <button aria-controls="matchListWithMessages" aria-selected="true" class="focus-button-style Cur(p) Fw($bold) D(f) Fld(r) Px(8px)" id="messages-tab" role="tab">Messages</button>
+//button[@role="tab" and @id="messages-tab" and @aria-controls="matchListWithMessages" and text()="Messages"]
+
+Matches - <button aria-controls="matchListNoMessages" aria-selected="false" class="focus-button-style Cur(p) Fw($bold) D(f) Fld(r) Px(8px)" id="match-tab" role="tab">Matches</button>
+//button[@role="tab" and @id="match-tab" and @aria-controls="matchListNoMessages" and text()="Matches"]
