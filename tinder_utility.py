@@ -607,7 +607,7 @@ class tinderbot:
 		# for each image there is a unique file name, that means for a specific person if it has multiple images, then we have multiple records
 		for unique_name in unique_names:
 			print(unique_name)
-			faces,algorithm_name,confidence_list = try_detect_face_algorithms(unique_name)
+			faces,algorithm_name,confidence_list = cvmodels.try_detect_face_algorithms(unique_name)
 			print(faces,algorithm_name,confidence_list)
 
 			values = append_tupple(core_values,unique_name)
