@@ -8,6 +8,8 @@ from PIL import Image
 import mysql.connector as mysql
 from cvmodels import *
 from tkinter import ttk,Tk,Label,Entry
+from shaonutil.strings import generateCryptographicallySecureRandomString
+
 import tkinter as tk
 
 import time
@@ -30,23 +32,8 @@ folders = {
 
 # mysql-connector-python
 # mysql_connector_repackaged
-column_info = {
-	'candidate_sid':'VARCHAR(255)',
-	'candidate_name':'VARCHAR(255)',
-	'candidate_age':'VARCHAR(255)',
-	'candidate_distance':'VARCHAR(255)',
-	'candidate_living_place':'VARCHAR(255)',
-	'candidate_university_or_instituition':'VARCHAR(255)',
-	'candidate_image_webp_url':'TEXT(1000)',
-	'candidate_unique_image_name':'VARCHAR(255)',
-	'candidate_detected_faces':'VARCHAR(255)',
-	'candidate_detection_alogorithm_name':'VARCHAR(255)',
-	'candidate_detected_confidences':'VARCHAR(255)',
-	'human_observation_faces_count':'VARCHAR(255)',
-	'human_observation_gender_array':'VARCHAR(255)',
-	'human_observation_nationality':'VARCHAR(255)'
-}
-
+_ = shaonutil.file.read_configuration_ini('private/config.ini')
+column_info = eval(_['db_details']['column_info'])
 
 
 def append_tupple(values,next_value):
@@ -641,17 +628,6 @@ def try_push_like(browser,If_not_reached_limit):
             If_not_reached_limit = not if_like_limit_reached(browser)
     
     return If_not_reached_limit
-
-def generateSecureRandomString(stringLength=10):
-    """Generate a secure random string of letters, digits and special characters """
-    password_characters = string.ascii_letters + string.digits #+ string.punctuation
-    return ''.join(secrets.choice(password_characters) for i in range(stringLength))
-
-def generateCryptographicallySecureRandomString(stringLength=10):
-	randomString = uuid.uuid4().hex.upper() # get a random string in a UUID fromat
-	randomString  = randomString[0:stringLength]
-	return randomString
-
 
 
 

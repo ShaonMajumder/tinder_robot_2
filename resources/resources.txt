@@ -5,6 +5,7 @@ https://towardsdatascience.com/how-to-define-custom-exception-classes-in-python-
 https://data-flair.training/blogs/top-python-interview-questions-answer/
 how to keep checking until timeout instead of sleep in python
 https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56
+https://chunml.github.io/ChunML.github.io/project/Training-Your-Own-Data-On-Caffe/
 
 Projects to review
 https://github.com/jocialiang/gender_classifier
