@@ -32,9 +32,8 @@ folders = {
 
 # mysql-connector-python
 # mysql_connector_repackaged
-_ = shaonutil.file.read_configuration_ini('private/config.ini')
+_ = shaonutil.file.read_configuration_ini('private/db_structure.ini')
 column_info = eval(_['db_details']['column_info'])
-
 
 def append_tupple(values,next_value):
 	return tuple(list(values) + [next_value])
