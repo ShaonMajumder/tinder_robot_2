@@ -1,8 +1,17 @@
-selenium==3.141.0
-shaonutil==0.0.0.17.1
-wget==3.2
-beautifulsoup4==4.8.2
+#python3 pip3
+selenium==4.11.2
+bs4==0.0.1
 cvmodels==0.0.0.0.1
-mysql-connector-python==8.0.19
-Pillow==7.0.0
-secrets==1.0.2
+shaonutil==0.0.0.70.1
+wget==3.2
+psutil==5.9.5
+wmi==1.4.9
+
+# selenium==3.141.0
+# pyOpenSSL==23.2.0
+# shaonutil==0.0.0.17.1
+# wget==3.2
+# beautifulsoup4==4.8.2
+# mysql-connector-python==8.0.19
+# Pillow==7.0.0
+# secrets==1.0.2

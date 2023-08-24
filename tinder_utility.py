@@ -8,7 +8,7 @@ from PIL import Image
 import mysql.connector as mysql
 from cvmodels import *
 from tkinter import ttk,Tk,Label,Entry
-from shaonutil.strings import generateCryptographicallySecureRandomString
+# from shaonutil.strings import generateCryptographicallySecureRandomString
 
 import tkinter as tk
 
