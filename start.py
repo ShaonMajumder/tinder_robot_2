@@ -6,6 +6,16 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 import configparser
 import pickle
+import hashlib
+
+def calculate_span_hash(unique_string):
+    hash_object = hashlib.md5(unique_string.encode())
+    hash_value = hash_object.hexdigest()
+    return hash_value
+
+def loadPreviousSession(driver):
+    driver = addCookie(driver, loadCookies() )
+    return driver
 
 def loadCookies():
     cookies = None
@@ -13,19 +23,22 @@ def loadCookies():
         cookies = pickle.load(file)
     return cookies
 
-def saveCookies(cookies):
+def saveCookies(driver):
+    cookies = driver.get_cookies()
+    # print('cookies', cookies)
     with open('cookies.pkl', 'wb') as file:
         pickle.dump(cookies, file)
 
 def addCookie(driver,cookies):
     for cookie in cookies:
         driver.add_cookie(cookie)
+    return driver
 
 cookies = None
 config = configparser.ConfigParser()
 config.read('config.txt')
-email = config.get('Credentials', 'email')
-password = config.get('Credentials', 'password')
+email = config.get('Credentials', 'email2')
+password = config.get('Credentials', 'password2')
 chrome_driver_path = 'resources/drivers/chromedriver'
 
 PRIVACY_TEXT = "We value your privacy."
@@ -48,35 +61,64 @@ NOT_INTERESTED_BUTTON = '//div[contains(text(), "Not interested")]'
 YOU_RECEIVED_A_LIKE_TEXT = '//h3[contains(text(), "You Received a Like")]'
 MAYBE_LATER_BUTTON = '//div[normalize-space()="Maybe Later"]'
 MAIN_CONTAINER_OF_SWAPPING = '//div[@aria-label="Card stack"]'
+ACTIVE_SLIDER_IMAGES_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")]'
+ACTIVE_SLIDER_IMAGES_BUTTON_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")]'
+ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
+IMAGES_DIV = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]'
 
 
+# MAIN_CONTAINER_OF_SWAPPING = '//div[contains(@class, "recsCardboard__cardsContainer")]'
 LIKE_BUTTON = '//span[normalize-space()="Like"]'
 NOPE_BUTTON = '//span[normalize-space()="Nope"]'
+# MAIN_CONTAINER_OF_SWAPPING = LIKE_BUTTON #'//div[contains(@class, "recsCardboard__cards")]'
 
+
+
+def imageDownloader(driver):
+    keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
+    n = len(keen_slider_slides_buttons)
+    print('length of image button '+n)
+    i = 0
+    for keen_slider_slides_button in keen_slider_slides_buttons:
+        keen_slider_slides_button.click()
+        images_div = driver.find_elements('xpath',IMAGES_DIV)
+        if(images_div):
+            for span in images_div:
+                try:
+                    style_attribute = span.get_attribute("style")
+                    print(calculate_span_hash(style_attribute))
+                except Exception as e:
+                    print('exception')
+    return driver
 
 def ExceptionContainerForPopup(driver):
     driver = locationSharingEnable(driver)
     driver = notificationDecline(driver)
     driver = youReceiveALikePrompt(driver)
 
+def savingPictures():
+    print('saving pictures ...')
+    keen_slider_slides = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_CONTAINER)
+    number_of_elements = len(keen_slider_slides)
+    print(f'Number of picture elements found: {number_of_elements}')
+
+
+    ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
+    keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
+    n = len(keen_slider_slides_button)
+    for keen_slider_slides_button in keen_slider_slides_buttons:
+        keen_slider_slides_button.click()
+        sleep(0.5)
+
+
 def swappinMechanism(driver):
-    wait.until(EC.presence_of_element_located((By.XPATH, MAIN_CONTAINER_OF_SWAPPING)))
-    matching_elements = driver.find_element('xpath',MAIN_CONTAINER_OF_SWAPPING)
-    print('like container ')
-    print(matching_elements)
-    if matching_elements:
-        print(f"The text '{MAIN_CONTAINER_OF_SWAPPING}' exists on the web page.")
-        wait.until(EC.presence_of_element_located((By.XPATH, LIKE_BUTTON)))
-        like_button = wait.until(EC.element_to_be_clickable((By.XPATH, LIKE_BUTTON)))
-        like_button.click()
-        print('You liked the person')
-        sleep(5)
-    else:
-        print(f"The text '{MAIN_CONTAINER_OF_SWAPPING}' does not exist on the web page.")
-            
+    
+
+    wait.until( EC.presence_of_element_located((By.XPATH, LIKE_BUTTON)))
+    like_button = wait.until(EC.element_to_be_clickable((By.XPATH, LIKE_BUTTON)))
+    like_button.click()
+    print('You liked the person')
     return driver
-
-
 
 def youReceiveALikePrompt(driver):
     try:
@@ -216,30 +258,32 @@ while True:
         break
 
 
-sleep(5)
 
 
+# saveCookies(driver)
+# driver.quit()
+# sleep(5)
 
-# cookies = driver.get_cookies()
-# print('cookies', cookies)
-# saveCookies(cookies)
-
-# cookies = loadCookies()
-# cookies = [{'domain': 'tinder.com', 'expiry': 1693637802, 'httpOnly': False, 'name': 'AWSALBCORS', 'path': '/', 'sameSite': 'None', 'secure': True, 'value': '4Wk9CXsUvS/TNOZXyqED9WS4FmUQ00Grb8OegQiisH7SBBuhqt47asqnPJXUV4GPJ7KjNBADdSTToaa6oQeOwUP+H5znx9dVpwzxdkkKwoblPQzVwH+NEEenaOXD'}, {'domain': '.tinder.com', 'expiry': 1693637790, 'httpOnly': False, 'name': 'AF_SYNC', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': '1693032990811'}, {'domain': '.tinder.com', 'expiry': 1727593008, 'httpOnly': False, 'name': 'AF_MEASUREMENT_STATUS', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'true'}, {'domain': '.tinder.com', 'expiry': 1693119389, 'httpOnly': False, 'name': '_gid', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'GA1.2.431384209.1693032989'}, {'domain': '.tinder.com', 'expiry': 1727593008, 'httpOnly': False, 'name': 'afUserId', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'd7e12fa3-ae7b-441c-a24f-be75825509bc-p'}, {'domain': '.tinder.com', 'expiry': 1727592989, 'httpOnly': False, 'name': '_ga', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'GA1.2.1224343956.1693032989'}, {'domain': '.tinder.com', 'expiry': 1727593008, 'httpOnly': False, 'name': 'AF_DEFAULT_MEASUREMENT_STATUS', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'false'}, {'domain': '.tinder.com', 'expiry': 1693033049, 'httpOnly': False, 'name': '_gat_gtag_UA_60214108_5', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': '1'}, {'domain': '.tinder.com', 'expiry': 1727593015, 'httpOnly': False, 'name': '_ga_CDPT3R4PG7', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': 'GS1.1.1693032989.1.1.1693033015.0.0.0'}, {'domain': 'tinder.com', 'expiry': 1693637802, 'httpOnly': False, 'name': 'AWSALB', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': '4Wk9CXsUvS/TNOZXyqED9WS4FmUQ00Grb8OegQiisH7SBBuhqt47asqnPJXUV4GPJ7KjNBADdSTToaa6oQeOwUP+H5znx9dVpwzxdkkKwoblPQzVwH+NEEenaOXD'}, {'domain': '.tinder.com', 'expiry': 1700808989, 'httpOnly': False, 'name': '_gcl_au', 'path': '/', 'sameSite': 'Lax', 'secure': False, 'value': '1.1.705253467.1693032989'}]
 # driver = webdriver.Chrome(options=chrome_options)
 # driver.get('https://tinder.com')
-# addCookie(driver,cookies)
+# driver = loadPreviousSession(driver)
 # driver.refresh()
+
+
 
 i = 0
 while True:
     try:
+        # driver = imageDownloader(driver)
         driver = swappinMechanism(driver)
+        sleep(5)
     except Exception as e:
         print(f"On Loop An error occurred: {e}")
         driver = ExceptionContainerForPopup(driver)
 
     print('Loop Step ',i)
     i = i + 1
+
+
 
 driver.quit()
