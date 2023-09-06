@@ -7,6 +7,51 @@ from time import sleep
 import configparser
 import pickle
 import hashlib
+import re
+import requests
+from io import BytesIO
+from PIL import Image
+from selenium.common.exceptions import StaleElementReferenceException
+
+cookies = None
+config = configparser.ConfigParser()
+config.read('config.txt')
+email = config.get('Credentials', 'email2')
+password = config.get('Credentials', 'password2')
+chrome_driver_path = 'resources/drivers/chromedriver'
+
+# xpath vars
+PRIVACY_TEXT = "We value your privacy."
+xpath_query = f'//p[contains(text(), "{PRIVACY_TEXT}")]'
+PRIVACY_ACCEPT_BUTTON = '//div[contains(text(), "I accept")]'
+######
+# Flow Constant
+LOGIN_BUTTON_XPATH = '//div[contains(text(), "Log in")]'
+LOGIN_WITH_FACEBOOK_BUTTON_XPATH = '//div[contains(text(), "Log in with Facebook")]'
+#Fillup Popup form
+EMAIL_TEXTINPUT_XPATH = '//label[contains(text(), "Email address or phone number:")]/following-sibling::input'
+PASSWORD_TEXTINPUT_XPATH = '//label[contains(text(), "Password:")]/following-sibling::input'
+SUMBIT_BUTTON_NAME = 'login'
+######
+SHARE_YOUR_LOCATION_TEXT = '//div[contains(text(), "Share Your Location")]'
+LOCATION_SHARING_BUTTON =  '//div[normalize-space()="Allow"]' #'//div[contains(text(), "Allow")]'
+ENABLE_NOTIFICATION_TEXT = '//div[contains(text(), "Enable Notifications")]'
+NOT_INTERESTED_BUTTON = '//div[contains(text(), "Not interested")]'
+######
+YOU_RECEIVED_A_LIKE_TEXT = '//h3[contains(text(), "You Received a Like")]'
+MAYBE_LATER_BUTTON = '//div[normalize-space()="Maybe Later"]'
+MAIN_CONTAINER_OF_SWAPPING = '//div[@aria-label="Card stack"]'
+
+## //div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]
+ACTIVE_SLIDER_IMAGES_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")]'
+ACTIVE_SLIDER_IMAGES_BUTTON_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")]'
+ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
+IMAGES_DIV = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]'
+######
+# MAIN_CONTAINER_OF_SWAPPING = '//div[contains(@class, "recsCardboard__cardsContainer")]'
+LIKE_BUTTON = '//span[normalize-space()="Like"]'
+NOPE_BUTTON = '//span[normalize-space()="Nope"]'
+# MAIN_CONTAINER_OF_SWAPPING = LIKE_BUTTON #'//div[contains(@class, "recsCardboard__cards")]'
 
 def calculate_span_hash(unique_string):
     hash_object = hashlib.md5(unique_string.encode())
@@ -34,46 +79,6 @@ def addCookie(driver,cookies):
         driver.add_cookie(cookie)
     return driver
 
-cookies = None
-config = configparser.ConfigParser()
-config.read('config.txt')
-email = config.get('Credentials', 'email2')
-password = config.get('Credentials', 'password2')
-chrome_driver_path = 'resources/drivers/chromedriver'
-
-PRIVACY_TEXT = "We value your privacy."
-xpath_query = f'//p[contains(text(), "{PRIVACY_TEXT}")]'
-PRIVACY_ACCEPT_BUTTON = '//div[contains(text(), "I accept")]'
-
-# Flow Constant
-LOGIN_BUTTON_XPATH = '//div[contains(text(), "Log in")]'
-LOGIN_WITH_FACEBOOK_BUTTON_XPATH = '//div[contains(text(), "Log in with Facebook")]'
-#Fillup Popup form
-EMAIL_TEXTINPUT_XPATH = '//label[contains(text(), "Email address or phone number:")]/following-sibling::input'
-PASSWORD_TEXTINPUT_XPATH = '//label[contains(text(), "Password:")]/following-sibling::input'
-SUMBIT_BUTTON_NAME = 'login'
-
-SHARE_YOUR_LOCATION_TEXT = '//div[contains(text(), "Share Your Location")]'
-LOCATION_SHARING_BUTTON =  '//div[normalize-space()="Allow"]' #'//div[contains(text(), "Allow")]'
-ENABLE_NOTIFICATION_TEXT = '//div[contains(text(), "Enable Notifications")]'
-NOT_INTERESTED_BUTTON = '//div[contains(text(), "Not interested")]'
-
-YOU_RECEIVED_A_LIKE_TEXT = '//h3[contains(text(), "You Received a Like")]'
-MAYBE_LATER_BUTTON = '//div[normalize-space()="Maybe Later"]'
-MAIN_CONTAINER_OF_SWAPPING = '//div[@aria-label="Card stack"]'
-ACTIVE_SLIDER_IMAGES_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")]'
-ACTIVE_SLIDER_IMAGES_BUTTON_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")]'
-ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
-IMAGES_DIV = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]'
-
-
-# MAIN_CONTAINER_OF_SWAPPING = '//div[contains(@class, "recsCardboard__cardsContainer")]'
-LIKE_BUTTON = '//span[normalize-space()="Like"]'
-NOPE_BUTTON = '//span[normalize-space()="Nope"]'
-# MAIN_CONTAINER_OF_SWAPPING = LIKE_BUTTON #'//div[contains(@class, "recsCardboard__cards")]'
-
-
-
 def imageDownloader(driver):
     keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
     n = len(keen_slider_slides_buttons)
@@ -96,6 +101,7 @@ def ExceptionContainerForPopup(driver):
     driver = notificationDecline(driver)
     driver = youReceiveALikePrompt(driver)
 
+# does not work
 def savingPictures():
     print('saving pictures ...')
     keen_slider_slides = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_CONTAINER)
@@ -110,6 +116,52 @@ def savingPictures():
         keen_slider_slides_button.click()
         sleep(0.5)
 
+def downloadImageRoutine():
+    keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
+    expected_number_of_images = len(keen_slider_slides_buttons)
+    print(f"expecting {expected_number_of_images} images")
+    while True:
+        i = 0
+        image_number = 0
+        unique_urls = set()
+        for keen_slider_slides_button in keen_slider_slides_buttons:
+            sleep(1)
+            keen_slider_slides_button.click() #ok
+            try:
+                images_div_elements = driver.find_elements('xpath', IMAGES_DIV)
+                n = len(images_div_elements)
+                # print(f"Image Div length {n}")
+                if n > 0:
+                    for image in images_div_elements:
+                        # print("writing style")
+                        try:
+                            style_text = image.get_attribute("style")
+                        except StaleElementReferenceException:
+                            print("Stale element reference while getting style. Skipping this element.")
+                            continue
+                        url_match = re.search(r'url\("(.*?)"\)', style_text)
+                        if url_match:
+                            background_url = url_match.group(1)
+                            # print(background_url)
+                            if background_url not in unique_urls:
+                                unique_urls.add(background_url)
+                                response = requests.get(background_url)
+                                if response.status_code == 200:
+                                    webp_data = BytesIO(response.content)
+                                    with Image.open(webp_data) as img:
+                                        img.save(f'output{image_number}.jpg', 'JPEG')  # Use f-string to include i in the filename
+                                        print(f"WebP image converted to JPG successfully. output{image_number}.jpg")
+                                        image_number = image_number + 1
+                                else:
+                                    print("Failed to download the image.")
+                        else:
+                            print("URL not found in the CSS rule.")
+            except StaleElementReferenceException:
+                print("Stale element reference while iterating through images. Skipping this element.")
+            i = i + 1
+        if expected_number_of_images == image_number:
+            print(f"accurately downloaded all image_number {image_number}")
+            break
 
 def swappinMechanism(driver):
     
@@ -138,8 +190,6 @@ def youReceiveALikePrompt(driver):
     
     return driver
 
-
-
 def locationSharingEnable(driver):
     try:
         matching_elements = driver.find_element('xpath',SHARE_YOUR_LOCATION_TEXT)
@@ -158,7 +208,6 @@ def locationSharingEnable(driver):
     
     return driver
 
-
 def notificationDecline(driver):
     try:
         matching_elements = driver.find_element('xpath',ENABLE_NOTIFICATION_TEXT)
@@ -176,6 +225,76 @@ def notificationDecline(driver):
         print(f"An error occurred: {e}")
     return driver
 
+def handlingPrivacyPopup(driver):
+    try:
+        matching_elements = driver.find_element('xpath',xpath_query)
+        if matching_elements:
+            print(f"The text '{PRIVACY_TEXT}' exists on the web page.")
+            wait.until(EC.presence_of_element_located((By.XPATH, PRIVACY_ACCEPT_BUTTON)))
+            accept_button = wait.until(EC.element_to_be_clickable((By.XPATH, PRIVACY_ACCEPT_BUTTON)))
+            accept_button.click()
+        else:
+            print(f"The text '{PRIVACY_TEXT}' does not exist on the web page.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def hadlingClickLogin(wait):
+    try:
+        wait.until(EC.presence_of_element_located((By.XPATH, LOGIN_BUTTON_XPATH)))
+        login_button = wait.until(EC.element_to_be_clickable((By.XPATH, LOGIN_BUTTON_XPATH)))
+        login_button.click()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def handleClickLoginWithFacebook(wait):    
+    try:
+        wait.until(EC.presence_of_element_located((By.XPATH, LOGIN_WITH_FACEBOOK_BUTTON_XPATH)))
+        login_button = wait.until(EC.element_to_be_clickable((By.XPATH, LOGIN_WITH_FACEBOOK_BUTTON_XPATH)))
+        login_button.click()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def handleFacebookPopup(driver):
+
+    # Detect the popup window
+    popup_window_handle = None
+
+
+    # Iterate through window handles to find the popup
+    for handle in driver.window_handles:
+        driver.switch_to.window(handle)
+        print("title", driver.title)
+        if "Facebook" in driver.title:  # Adjust the title as needed
+            popup_window_handle = handle
+            print('Login with Facebook Popup found')
+            break
+
+    email_input = driver.find_element('xpath', EMAIL_TEXTINPUT_XPATH)
+    password_input = driver.find_element('xpath', PASSWORD_TEXTINPUT_XPATH)
+    login_button = driver.find_element(By.NAME, SUMBIT_BUTTON_NAME)  # Replace with the actual element locator
+
+    email_input.send_keys(email)
+    password_input.send_keys(password)
+    login_button.click()
+
+    # if popup_window_handle:
+    driver.switch_to.window(popup_window_handle)
+    while True:
+        try:
+            # Check if the current window handle still exists
+            driver.switch_to.window(popup_window_handle)
+            print('contineu')
+        except Exception:
+            # The window handle no longer exists, meaning the popup has closed
+            print("Popup has closed.")
+            driver.switch_to.window(driver.window_handles[0])  # Switch back to the main window
+            break
+
+def countNumberOfImages(driver):
+    keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
+    n = len(keen_slider_slides_buttons)
+    print(n) #works give accruate images container number
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f'--webdriver={chrome_driver_path}')
 driver = webdriver.Chrome(options=chrome_options)
@@ -184,81 +303,10 @@ driver.get(url)
 
 wait = WebDriverWait(driver, 10)
 
-
-try:
-    matching_elements = driver.find_element('xpath',xpath_query)
-    if matching_elements:
-        print(f"The text '{PRIVACY_TEXT}' exists on the web page.")
-        wait.until(EC.presence_of_element_located((By.XPATH, PRIVACY_ACCEPT_BUTTON)))
-        accept_button = wait.until(EC.element_to_be_clickable((By.XPATH, PRIVACY_ACCEPT_BUTTON)))
-        accept_button.click()
-    else:
-        print(f"The text '{PRIVACY_TEXT}' does not exist on the web page.")
-
-    
-except Exception as e:
-    print(f"An error occurred: {e}")
-
-
-
-
-
-
-
-try:
-    wait.until(EC.presence_of_element_located((By.XPATH, LOGIN_BUTTON_XPATH)))
-    login_button = wait.until(EC.element_to_be_clickable((By.XPATH, LOGIN_BUTTON_XPATH)))
-    login_button.click()
-except Exception as e:
-    print(f"An error occurred: {e}")
-
-    
-try:
-    wait.until(EC.presence_of_element_located((By.XPATH, LOGIN_WITH_FACEBOOK_BUTTON_XPATH)))
-    login_button = wait.until(EC.element_to_be_clickable((By.XPATH, LOGIN_WITH_FACEBOOK_BUTTON_XPATH)))
-    login_button.click()
-except Exception as e:
-    print(f"An error occurred: {e}")
-
-
-# Detect the popup window
-popup_window_handle = None
-
-
-# Iterate through window handles to find the popup
-for handle in driver.window_handles:
-    driver.switch_to.window(handle)
-    print("title", driver.title)
-    if "Facebook" in driver.title:  # Adjust the title as needed
-        popup_window_handle = handle
-        print('Login with Facebook Popup found')
-        break
-
-
-email_input = driver.find_element('xpath', EMAIL_TEXTINPUT_XPATH)
-password_input = driver.find_element('xpath', PASSWORD_TEXTINPUT_XPATH)
-login_button = driver.find_element(By.NAME, SUMBIT_BUTTON_NAME)  # Replace with the actual element locator
-
-
-email_input.send_keys(email)
-password_input.send_keys(password)
-login_button.click()
-
-# if popup_window_handle:
-driver.switch_to.window(popup_window_handle)
-while True:
-    try:
-        # Check if the current window handle still exists
-        driver.switch_to.window(popup_window_handle)
-        print('contineu')
-    except Exception:
-        # The window handle no longer exists, meaning the popup has closed
-        print("Popup has closed.")
-        driver.switch_to.window(driver.window_handles[0])  # Switch back to the main window
-        break
-
-
-
+handlingPrivacyPopup(driver)
+hadlingClickLogin(wait)
+handleClickLoginWithFacebook(wait)
+handleFacebookPopup(driver)
 
 # saveCookies(driver)
 # driver.quit()
