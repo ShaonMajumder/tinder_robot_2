@@ -12,14 +12,11 @@ import requests
 from io import BytesIO
 from PIL import Image
 from selenium.common.exceptions import StaleElementReferenceException
+import cv2
+import mysql.connector
+import os
 
-cookies = None
-config = configparser.ConfigParser()
-config.read('config.txt')
-email = config.get('Credentials', 'email2')
-password = config.get('Credentials', 'password2')
-chrome_driver_path = 'resources/drivers/chromedriver'
-
+folderPath = 'extracted_images'
 # xpath vars
 PRIVACY_TEXT = "We value your privacy."
 xpath_query = f'//p[contains(text(), "{PRIVACY_TEXT}")]'
@@ -41,17 +38,28 @@ NOT_INTERESTED_BUTTON = '//div[contains(text(), "Not interested")]'
 YOU_RECEIVED_A_LIKE_TEXT = '//h3[contains(text(), "You Received a Like")]'
 MAYBE_LATER_BUTTON = '//div[normalize-space()="Maybe Later"]'
 MAIN_CONTAINER_OF_SWAPPING = '//div[@aria-label="Card stack"]'
-
+######
 ## //div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]
-ACTIVE_SLIDER_IMAGES_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")]'
-ACTIVE_SLIDER_IMAGES_BUTTON_CONTAINER = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")]'
-ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
-IMAGES_DIV = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //span[contains(@class, "keen-slider__slide")] //div[@role="img"]'
+ACTIVE_CARD = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"]'
+ACTIVE_SLIDER_IMAGES_CONTAINER        = f'{ACTIVE_CARD} //span[contains(@class, "keen-slider__slide")]'
+ACTIVE_SLIDER_IMAGES_BUTTON_CONTAINER = f'{ACTIVE_CARD} //div[contains(@class, "CenterAlign")]'
+ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH    = f'{ACTIVE_CARD} //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
+IMAGES_DIV                            = f'{ACTIVE_CARD} //span[contains(@class, "keen-slider__slide")] //div[@role="img"]'
+XPATH_AGE = f'{ACTIVE_CARD} //span[@itemprop="age"]'
+XPATH_NAME = f'{ACTIVE_CARD} //span[@itemprop="name"]'
+
 ######
 # MAIN_CONTAINER_OF_SWAPPING = '//div[contains(@class, "recsCardboard__cardsContainer")]'
 LIKE_BUTTON = '//span[normalize-space()="Like"]'
 NOPE_BUTTON = '//span[normalize-space()="Nope"]'
 # MAIN_CONTAINER_OF_SWAPPING = LIKE_BUTTON #'//div[contains(@class, "recsCardboard__cards")]'
+
+cookies = None
+config = configparser.ConfigParser()
+config.read('config.txt')
+email = config.get('Credentials', 'email2')
+password = config.get('Credentials', 'password2')
+chrome_driver_path = 'resources/drivers/chromedriver'
 
 def calculate_span_hash(unique_string):
     hash_object = hashlib.md5(unique_string.encode())
@@ -109,7 +117,7 @@ def savingPictures():
     print(f'Number of picture elements found: {number_of_elements}')
 
 
-    ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = '//div[@aria-hidden="false" and @data-keyboard-gamepad="true"] //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
+    ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH = f'{ACTIVE_CARD} //div[contains(@class, "CenterAlign")] //button[contains(@class, "bullet")]'
     keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
     n = len(keen_slider_slides_button)
     for keen_slider_slides_button in keen_slider_slides_buttons:
@@ -163,13 +171,17 @@ def downloadImageRoutine():
             print(f"accurately downloaded all image_number {image_number}")
             break
 
-def swappinMechanism(driver):
-    
-
-    wait.until( EC.presence_of_element_located((By.XPATH, LIKE_BUTTON)))
-    like_button = wait.until(EC.element_to_be_clickable((By.XPATH, LIKE_BUTTON)))
-    like_button.click()
-    print('You liked the person')
+def swappinMechanism(driver, like):
+    if like :
+        wait.until( EC.presence_of_element_located((By.XPATH, LIKE_BUTTON)))
+        like_button = wait.until(EC.element_to_be_clickable((By.XPATH, LIKE_BUTTON)))
+        like_button.click()
+        print('You liked the person')
+    else:
+        wait.until( EC.presence_of_element_located((By.XPATH, NOPE_BUTTON)))
+        like_button = wait.until(EC.element_to_be_clickable((By.XPATH, NOPE_BUTTON)))
+        like_button.click()
+        print('You liked the person')
     return driver
 
 def youReceiveALikePrompt(driver):

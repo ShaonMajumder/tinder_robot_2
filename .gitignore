@@ -1,3 +1,4 @@
 private/
 __pycache__/
 config.txt
+extracted_images/
