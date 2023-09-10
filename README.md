@@ -6,4 +6,4 @@ webdriver - https://chromedriver.storage.googleapis.com/index.html?path=114.0.57
 
 ## backup database
 
-mysqldump -u username -p databasename > filename.sql
+mysqldump -u shaon -p tinder > 10-09-2023_7_22_AM.sql

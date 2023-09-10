@@ -5,14 +5,43 @@ create table persons
     name VARCHAR(255),
     age DECIMAL(5, 2),  
     distance DECIMAL(8, 2),
+    university VARCHAR(400),
     passions VARCHAR(1000),
-    images_number INT
+    
     is_me_liked BOOLEAN,
     is_limit_reached BOOLEAN
     
-    gender TINYINT UNSIGNED
+    
     is_verified BOOLEAN,
+    images_number INT,
+    gender TINYINT UNSIGNED,
+    isHijab BOOLEAN,
+    isBorka BOOLEAN,
+    isSharee BOOLEAN,
+    chestPercentage DECIMAL(3, 2),
+    smallHipToWaistRatio DECIMAL(3, 2),
+    largeEyePercentage DECIMAL(3, 2),
+    skinType BOOLEAN,
+    isTeeth BOOLEAN,
+    isSmiling BOOLEAN,
+    isRude BOOLEAN,
+    isHairCurly,
+    isHairStraight,
+    isBusty BOOLEAN,
+    isBulky BOOLEAN,
+    isSlim BOOLEAN,
+    
+    lowQualityImagePercentage DECIMAL(3, 2),
+    isNotHuman BOOLEAN,
+    wearSpectacles BOOLEAN,
+    wearLipstic BOOLEAN,
+    wearBindiya BOOLEAN,
+    showingCleavage BOOLEAN,
    );
+
+average of lowQualityImagePercentage - sum of lowQualityImagePercentage / n
+
+# facialSymetry different class,
 
 ALTER TABLE persons
 ADD age DECIMAL(5, 2);
@@ -29,3 +58,51 @@ ADD COLUMN images_number INT;
 
 ALTER TABLE persons
 ADD COLUMN is_limit_reached BOOLEAN;
+
+ALTER TABLE persons
+ADD COLUMN is_verified BOOLEAN;
+
+ALTER TABLE persons
+ADD university VARCHAR(400);
+
+ALTER TABLE persons
+ADD isHijab BOOLEAN;
+
+ALTER TABLE persons
+ADD isBorka BOOLEAN;
+
+ALTER TABLE persons
+ADD isSharee BOOLEAN;
+
+ALTER TABLE persons
+ADD chestPercentage DECIMAL(3, 2);
+
+ALTER TABLE persons
+ADD smallHipToWaistRatio DECIMAL(3, 2),
+    largeEyePercentage DECIMAL(3, 2),
+    skinType BOOLEAN,
+    isTeeth BOOLEAN,
+    isSmiling BOOLEAN,
+    isRude BOOLEAN,
+    isHairCurly,
+    isHairStraight,
+    isBusty BOOLEAN,
+    isBulky BOOLEAN,
+    isSlim BOOLEAN,
+    isLipstic BOOLEAN,
+    
+
+ALTER TABLE persons
+ADD lowQualityImagePercentage DECIMAL(3, 2);
+
+ALTER TABLE persons
+ADD isNotHuman BOOLEAN;
+
+ALTER TABLE persons
+ADD wearSpectacles BOOLEAN;
+
+ALTER TABLE persons
+ADD wearBindiya BOOLEAN;
+
+ALTER TABLE persons
+ADD showingCleavage BOOLEAN;

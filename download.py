@@ -15,6 +15,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 import cv2 
 import mysql.connector
 import os
+import cvmodels
 
 
 IMAGE_FOLDER_PATH = 'extracted_images'
@@ -64,6 +65,8 @@ IMAGES_DIV = f'{ACTIVE_CARD} //span[contains(@class, "keen-slider__slide")] //di
 LIKE_BUTTON = '//span[normalize-space()="Like"]'
 NOPE_BUTTON = '//span[normalize-space()="Nope"]'
 # MAIN_CONTAINER_OF_SWAPPING = LIKE_BUTTON #'//div[contains(@class, "recsCardboard__cards")]'
+XPATH_VERIFIED_BADGE = '//*[text()="Verified!"]'
+XPATH_UNIVERSITY = "//div[@itemprop='affiliation']"
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f'--webdriver={chrome_driver_path}')
@@ -142,8 +145,26 @@ def getPassions(driver):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-     
-def saveInfoToDB(name, age, distance, passions, is_me_liked, images_number):
+
+def isVerifiedProfile(driver):
+    try:
+        verified = driver.find_element(By.XPATH, XPATH_VERIFIED_BADGE)
+        return True if len(verified) == 1 else False
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+    
+def getUniversity(driver):
+    try:
+        age_element = driver.find_element(By.XPATH, XPATH_UNIVERSITY)
+        age = age_element.text
+        return age
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+         
+def saveInfoToDB(name, age, distance, university, passions, is_me_liked, images_number, isVerified):
     try:
         table_name = 'persons'
         connection = mysql.connector.connect(
@@ -153,8 +174,8 @@ def saveInfoToDB(name, age, distance, passions, is_me_liked, images_number):
             database=dbname
         )
         cursor = connection.cursor()
-        query = f"INSERT INTO {table_name} (name, age, distance, passions, is_me_liked, images_number) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (name, age, distance, passions, is_me_liked, images_number)
+        query = f"INSERT INTO {table_name} (name, age, distance, university, passions, is_me_liked, images_number, is_verified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (name, age, distance, university, passions, is_me_liked, images_number, isVerified)
         cursor.execute(query, values)
         connection.commit()
         cursor.close()
@@ -237,6 +258,8 @@ def downloadImageRoutine():
     age = ''
     distance = ''
     passions = ''
+    verified = None
+    university = ''
     keen_slider_slides_buttons = driver.find_elements('xpath',ACTIVE_SLIDER_IMAGES_BUTTONS_XPATH)
     expected_number_of_images = len(keen_slider_slides_buttons)
     print(f"expecting {expected_number_of_images} images")
@@ -255,6 +278,10 @@ def downloadImageRoutine():
                 distance = getDistance(driver)
             if not passions:
                 passions = getPassions(driver)
+            if not verified:
+                verified = isVerifiedProfile(driver)
+            if not university:
+                university = getUniversity(driver)
             try:
                 images_div_elements = driver.find_elements('xpath', IMAGES_DIV)
                 n = len(images_div_elements)
@@ -299,4 +326,4 @@ def downloadImageRoutine():
     else:
         liked = False
     swappinMechanism(driver, liked)
-    saveInfoToDB(name, age, distance, passions, liked, expected_number_of_images)
+    saveInfoToDB(name, age, distance, university, passions, liked, expected_number_of_images, verified)
