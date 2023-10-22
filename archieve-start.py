@@ -57,8 +57,8 @@ NOPE_BUTTON = '//span[normalize-space()="Nope"]'
 cookies = None
 config = configparser.ConfigParser()
 config.read('config.txt')
-email = config.get('Credentials', 'email2')
-password = config.get('Credentials', 'password2')
+email = config.get('Credentials', 'email')
+password = config.get('Credentials', 'password')
 chrome_driver_path = 'resources/drivers/chromedriver'
 
 def calculate_span_hash(unique_string):
@@ -171,7 +171,7 @@ def downloadImageRoutine():
             print(f"accurately downloaded all image_number {image_number}")
             break
 
-def swappinMechanism(driver, like):
+def swappingMechanism(driver, like):
     if like :
         wait.until( EC.presence_of_element_located((By.XPATH, LIKE_BUTTON)))
         like_button = wait.until(EC.element_to_be_clickable((By.XPATH, LIKE_BUTTON)))
@@ -335,7 +335,7 @@ i = 0
 while True:
     try:
         # driver = imageDownloader(driver)
-        driver = swappinMechanism(driver)
+        driver = swappingMechanism(driver)
         sleep(5)
     except Exception as e:
         print(f"On Loop An error occurred: {e}")
