@@ -91,6 +91,7 @@ XPATH_ADD_HOME_SCREEN_NOT_INTERESTED_BUTTON = '//div[contains(text(), "Not inter
 XPATH_RECEIVED_N_LIKES = '//div[contains(text(),"See Who Likes You")]'
 XPATH_RECEIVED_N_LIKES_MAY_BE_LATTER_BUTTON = '//div[contains(text(),"Maybe Later")]'
 XPATH_REACHED_FREE_LIMIT = '//span[contains(text(),"Unlimited Likes")]'
+URL_SWAPPING = 'https://tinder.com/app/recs'
 
 def detectFace(image_path):
     image = cv2.imread(image_path)
@@ -427,9 +428,26 @@ def ExceptionContainerForPopup(driver):
     return driver
     
     
+def checkUrl(driver):
+    print(driver.current_url)
+    if driver.current_url != URL_SWAPPING:
+        driver.get(URL_SWAPPING)
+
+
+def checkUrl(driver):
+    current_url = driver.current_url
+    if current_url != URL_SWAPPING:
+        driver.get(URL_SWAPPING)
+        # Wait until the new URL is fully loaded
+        WebDriverWait(driver, 10).until(
+            EC.url_to_be(URL_SWAPPING)
+        )
+
+        
 
 def downloadImageRoutine(driver):
     try: 
+        checkUrl(driver)
         driver.switch_to.window(driver.current_window_handle)
         createFolderIfNotExists(IMAGE_FOLDER_PATH)
         last_person_id = getLastInsertedPersonId()
