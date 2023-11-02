@@ -530,3 +530,6 @@ def downloadImageRoutine(driver):
         print(f"An error occurred: {e}")
         driver = ExceptionContainerForPopup(driver)
     return driver
+
+def singleRun():
+    downloadImageRoutine(driver)
